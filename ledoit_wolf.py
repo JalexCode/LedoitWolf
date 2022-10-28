@@ -1,4 +1,10 @@
-"""Ledoit & Wolf constant correlation unequal variance shrinkage estimator."""
+"""
+Original: https://github.com/WLM1ke/LedoitWolf
+Actual source: https://github.com/JalexCode/LedoitWolf
+
+@description:
+Ledoit & Wolf constant correlation unequal variance shrinkage estimator.
+"""
 from typing import Tuple
 
 import numpy as np
@@ -7,14 +13,15 @@ class LedoitWolf:
         self._covariance: np.array = None
         self._average_cor: float = None
         self._shrink: float = None
-        
-    def covariance(self) -> np.array:
+    
+    @property    
+    def covariance_(self) -> np.array:
         return self._covariance
-    
-    def average_cor(self) -> float:
+    @property  
+    def average_cor_(self) -> float:
         return self._average_cor
-    
-    def shrink(self) -> float:
+    @property  
+    def shrink_(self) -> float:
         return self._shrink
     
     def shrinkage(self, returns: np.array) -> Tuple[np.array, float, float]:
@@ -39,7 +46,7 @@ class LedoitWolf:
         """
         t, n = returns.shape
         mean_returns = np.mean(returns, axis=0, keepdims=True)
-        returns -= mean_returns
+        returns = returns - mean_returns # previus version use returns-=mean_returns, and that raises an UFuncOutputCastingError -> Cannot cast ufunc 'subtract' output from dtype('float64') to dtype('int64') with casting rule 'same_kind'
         sample_cov = returns.transpose() @ returns / t
 
         # sample average correlation
